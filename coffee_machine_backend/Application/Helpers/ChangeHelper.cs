@@ -5,8 +5,18 @@ using coffee_machine_backend.Domain.Models;
 
 public class ChangeHelper : IChangeHelper
 {
-    public Change CalculateChange(int changeAmount, Dictionary<int, int> availableCoins)
+    public Change? CalculateChange(int changeAmount, Dictionary<int, int> availableCoins)
     {
-        return null;
+        var change = new Change { Amount = changeAmount };
+        foreach (var coin in availableCoins.Keys.OrderByDescending(c => c))
+        {
+            var count = Math.Min(changeAmount / coin, availableCoins[coin]);
+            if (count > 0)
+            {
+                change.CoinBreakdown[coin] = count;
+                changeAmount -= coin * count;
+            }
+        }
+        return changeAmount == 0 ? change : null;
     }
 }
