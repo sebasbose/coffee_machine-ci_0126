@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:coffee_machine_frontend/constants.dart';
+import 'package:coffee_machine_frontend/models/order.dart';
 import 'package:http/http.dart' as http;
 import '../models/coffee.dart';
 import '../models/payment.dart';
@@ -20,10 +21,10 @@ class CoffeeService {
     }
   }
 
-  Future<Change> placeOrder(Map<String, int> order, Payment payment) async {
+  Future<String> placeOrder(Order order, Payment payment) async {
     final url = Uri.parse('$baseUrl/Purchase');
     final payload = jsonEncode({
-      'order': order,
+      ...order.toJson(),
       'payment': payment.toJson(),
     });
 
@@ -34,11 +35,10 @@ class CoffeeService {
     );
 
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Change.fromJson(json);
+      return response.body;
     } else {
       final errorMessage =
-        response.body.isNotEmpty ? response.body : 'Error al realizar la orden';
+        response.body.isNotEmpty ? response.body : 'Error al realizar orden.';
       throw Exception(errorMessage);
     }
   }

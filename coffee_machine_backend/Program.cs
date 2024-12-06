@@ -2,7 +2,22 @@ using coffee_machine_backend.Application.Helpers;
 using coffee_machine_backend.Application.Interfaces;
 using coffee_machine_backend.Application.Managers;
 
+var CorsPolicy = "_corsPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS Policy
+builder.Services.AddCors(options =>
+{
+options.AddPolicy(
+    name: CorsPolicy,
+    builder =>
+    {
+        builder.AllowAnyOrigin();
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+    });
+});
 
 // Add services to the container.
 
@@ -24,6 +39,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(CorsPolicy);
 
 app.UseAuthorization();
 
