@@ -1,8 +1,15 @@
+using coffee_machine_backend.Application.Helpers;
+using coffee_machine_backend.Application.Interfaces;
+using coffee_machine_backend.Application.Managers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<ICoffeeManager, CoffeeManager>();
+builder.Services.AddScoped<IChangeHelper, ChangeHelper>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
