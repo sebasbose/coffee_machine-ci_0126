@@ -78,9 +78,9 @@ class _PaymentDialogState extends State<PaymentDialog> {
                     IconButton(
                       icon: Icon(Icons.remove),
                       onPressed: () {
-                        if (coinOptions[entry.key]! > 0) {
+                        if (billOptions[entry.key]! > 0) {
                           setState(() {
-                            coinOptions[entry.key] = coinOptions[entry.key]! - 1;
+                            billOptions[entry.key] = billOptions[entry.key]! - 1;
                           });
                         }
                       },
@@ -90,7 +90,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
                       icon: Icon(Icons.add),
                       onPressed: () {
                         setState(() {
-                          coinOptions[entry.key] = coinOptions[entry.key]! + 1;
+                          billOptions[entry.key] = billOptions[entry.key]! + 1;
                         });
                       },
                     ),
@@ -113,7 +113,7 @@ class _PaymentDialogState extends State<PaymentDialog> {
             final selectedCoins = coinOptions.entries
                 .expand((entry) => List.generate(entry.value, (_) => entry.key))
                 .toList();
-            final selectedBills = coinOptions.entries
+            final selectedBills = billOptions.entries
                 .expand((entry) => List.generate(entry.value, (_) => entry.key))
                 .toList();
             widget.onPaymentSelected(selectedCoins, selectedBills, getTotalPayment());
