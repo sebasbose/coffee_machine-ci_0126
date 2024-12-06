@@ -11,7 +11,7 @@ public class CoffeeController : ControllerBase
 {
     private readonly ICoffeeManager _coffeeManager;
     
-    CoffeeController(ICoffeeManager coffeeManager)
+    public CoffeeController(ICoffeeManager coffeeManager)
     {
         _coffeeManager = coffeeManager;
     }
@@ -20,20 +20,20 @@ public class CoffeeController : ControllerBase
     public IActionResult GetAvailableCoffees() => Ok(_coffeeManager.GetAvailableCoffees());
 
     [HttpPost("Purchase")]
-    public IActionResult Purchase([FromBody] Dictionary<string, int> order, [FromBody] Payment payment)
+    public IActionResult Purchase([FromBody] PurchaseRequest request)
     {
-        if (order == null || order.Count == 0)
+        if (request.Order == null || request.Order.Count == 0)
             return BadRequest("La orden no puede ser nula ni estar vacia.");
 
-        if (payment == null)
+        if (request.Payment == null)
             return BadRequest("Los detalles del pago no pueden ser nulos.");
 
-        if (payment.TotalAmount <= 0)
+        if (request.Payment.TotalAmount <= 0)
             return BadRequest("La cantidad total de pago debe ser mayor a 0.");
 
         try
         {
-            var result = _coffeeManager.PurchaseCoffee(order, payment);
+            var result = _coffeeManager.PurchaseCoffee(request.Order, request.Payment);
             if (result == null)
                 return StatusCode(500, "Ocurrio un error al procesar la solicitud.");
 

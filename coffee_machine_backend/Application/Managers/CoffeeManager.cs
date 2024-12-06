@@ -25,7 +25,7 @@ public class CoffeeManager : ICoffeeManager
 
     private readonly IChangeHelper _coffeeHelper;
 
-    CoffeeManager(IChangeHelper changeHelper)
+    public CoffeeManager(IChangeHelper changeHelper)
     {
         this._coffeeHelper = changeHelper;
     }
