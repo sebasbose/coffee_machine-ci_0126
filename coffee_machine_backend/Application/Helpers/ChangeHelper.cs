@@ -3,9 +3,9 @@
 using coffee_machine_backend.Application.Interfaces;
 using coffee_machine_backend.Domain.Models;
 
-public class ChangeHelper : IChangeHelper
+public class ChangeHelper
 {
-    public Change? CalculateChange(int changeAmount, Dictionary<int, int> availableCoins)
+    public static Change? CalculateChange(int changeAmount, Dictionary<int, int> availableCoins)
     {
         var change = new Change { Amount = changeAmount };
         foreach (var coin in availableCoins.Keys.OrderByDescending(c => c))

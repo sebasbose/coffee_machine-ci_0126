@@ -23,13 +23,6 @@ public class CoffeeManager : ICoffeeManager
         { 25, 25 }
     };
 
-    private readonly IChangeHelper _coffeeHelper;
-
-    public CoffeeManager(IChangeHelper changeHelper)
-    {
-        this._coffeeHelper = changeHelper;
-    }
-
     public List<CoffeeType> GetAvailableCoffees() => this.CoffeeInventory;
 
     public string PurchaseCoffee(Dictionary<string, int> order, Payment payment)
@@ -45,7 +38,7 @@ public class CoffeeManager : ICoffeeManager
             selected.Stock -= coffee.Value;
         }
 
-        var change = _coffeeHelper.CalculateChange(payment.TotalAmount - totalCost, CoinInventory);
+        var change = ChangeHelper.CalculateChange(payment.TotalAmount - totalCost, CoinInventory);
         if (change == null) return "Fuera de servicio: Cannot provide change.";
 
         foreach (var coin in change.CoinBreakdown) CoinInventory[coin.Key] -= coin.Value;

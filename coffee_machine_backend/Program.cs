@@ -23,7 +23,6 @@ options.AddPolicy(
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ICoffeeManager, CoffeeManager>();
-builder.Services.AddScoped<IChangeHelper, ChangeHelper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

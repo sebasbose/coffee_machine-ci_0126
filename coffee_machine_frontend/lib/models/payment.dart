@@ -1,7 +1,8 @@
 class Payment {
-  final int totalAmount;
-  final List<int> coins;
-  final List<int> bills;
+  int totalAmount;
+  int selectedAmount = 0;
+  List<int> coins;
+  List<int> bills;
 
   Payment({
     required this.totalAmount,
@@ -11,7 +12,7 @@ class Payment {
 
   Map<String, dynamic> toJson() {
     return {
-      'totalAmount': totalAmount,
+      'totalAmount': selectedAmount,
       'coins': coins,
       'bills': bills,
     };

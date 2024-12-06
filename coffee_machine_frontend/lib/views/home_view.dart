@@ -1,5 +1,6 @@
 import 'package:coffee_machine_frontend/models/order.dart';
 import 'package:coffee_machine_frontend/models/payment.dart';
+import 'package:coffee_machine_frontend/widgets/payment_dialog.dart';
 import 'package:flutter/material.dart';
 import '../models/coffee.dart';
 import '../services/coffee_service.dart';
@@ -15,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   final CoffeeService _coffeeService = CoffeeService();
   List<Coffee> coffees = [];
   Map<String, int> order = {};
-  int totalCost = 0;
+  Payment payment = Payment(totalAmount: 0, coins: [], bills: []);
   bool isLoading = false;
 
   @override
@@ -24,7 +25,6 @@ class _HomeViewState extends State<HomeView> {
     fetchCoffees();
   }
 
-  // Fetch coffees from the backend
   Future<void> fetchCoffees() async {
     setState(() {
       isLoading = true;
@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
       setState(() {
         coffees = result;
         order.clear();
-        totalCost = 0;
+        payment = Payment(totalAmount: 0, coins: [], bills: []);
       });
     } catch (e) {
       showError("Error obteniendo inventario de cafe: $e");
@@ -47,37 +47,36 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> placeOrder() async {
-  if (order.isEmpty || totalCost == 0) {
-    showError("Order cannot be empty.");
-    return;
-  }
+    if (order.isEmpty || this.payment.totalAmount == 0) {
+      showError("La orden no puede ser procesada.");
+      return;
+    }
 
-  final currentOrder = Order(items: order);
-  final payment = Payment(
-    totalAmount: totalCost,
-    coins: [], // Ajusta según las monedas disponibles
-    bills: [],
-  );
+    if (this.payment.coins.isEmpty || this.payment.bills.isEmpty) {
+      showError("Debes seleccionar como pagar.");
+      return;
+    }
 
-  setState(() {
-    isLoading = true;
-  });
+    final currentOrder = Order(items: order);
+    final payment = this.payment;
 
-  try {
-    final result = await _coffeeService.placeOrder(currentOrder, payment);
-    showSuccess(result);
-    fetchCoffees();
-  } catch (e) {
-    showError("Error al realizar orden: $e");
-  } finally {
     setState(() {
-      isLoading = false;
+      isLoading = true;
     });
+
+    try {
+      final result = await _coffeeService.placeOrder(currentOrder, payment);
+      showSuccess(result);
+      fetchCoffees();
+    } catch (e) {
+      showError("Error al realizar orden: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
-}
 
-
-  // Show error dialog
   void showError(String message) {
     showDialog(
       context: context,
@@ -94,7 +93,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  // Show success dialog
   void showSuccess(String message) {
     showDialog(
       context: context,
@@ -110,6 +108,21 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+  void showPaymentDialog() {
+  showDialog(
+    context: context,
+    builder: (ctx) => PaymentDialog(
+      totalAmount: payment.totalAmount,
+      onPaymentSelected: (coins, bills, selectedAmount) {
+        payment.coins = coins;
+        payment.bills = bills;
+        payment.selectedAmount = selectedAmount;
+        placeOrder();
+      },
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +140,9 @@ class _HomeViewState extends State<HomeView> {
                   onQuantityChanged: (quantity) {
                     setState(() {
                       order[coffee.name] = quantity;
-                      totalCost = order.entries
-                          .map((e) => coffees
-                              .firstWhere((c) => c.name == e.key)
-                              .price *
+                      payment.totalAmount = order.entries
+                          .map((e) =>
+                              coffees.firstWhere((c) => c.name == e.key).price *
                               e.value)
                           .fold(0, (sum, price) => sum + price);
                     });
@@ -139,8 +151,8 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
       bottomNavigationBar: OrderSummary(
-        totalAmount: totalCost,
-        onPlaceOrder: placeOrder,
+        totalAmount: payment.totalAmount,
+        onPlaceOrder: showPaymentDialog,
       ),
     );
   }
