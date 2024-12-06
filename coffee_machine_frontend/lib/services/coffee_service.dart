@@ -6,7 +6,7 @@ import '../models/payment.dart';
 import '../models/change.dart';
 
 class CoffeeService {
-  final String baseUrl = backend_url_open;
+  final String baseUrl = backend_url;
 
   Future<List<Coffee>> fetchCoffees() async {
     final url = Uri.parse('$baseUrl/AvailableCoffees');
