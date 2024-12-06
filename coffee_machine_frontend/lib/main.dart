@@ -11,12 +11,12 @@ class CoffeeMachine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Coffee Machine',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeView(title: 'Flutter Demo Home Page'),
+      home: HomeView(),
     );
   }
 }

@@ -1,6 +1,7 @@
 ﻿namespace coffee_machine_backend.API.Controllers;
 
 using coffee_machine_backend.Application.Interfaces;
+using coffee_machine_backend.Domain.Database;
 using coffee_machine_backend.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class CoffeeController : ControllerBase
 {
+    private readonly Database _database;
     private readonly ICoffeeManager _coffeeManager;
     
     public CoffeeController(ICoffeeManager coffeeManager)
     {
+        _database = new();
         _coffeeManager = coffeeManager;
     }
 
     [HttpGet("AvailableCoffees")]
-    public IActionResult GetAvailableCoffees() => Ok(_coffeeManager.GetAvailableCoffees());
+    public IActionResult GetAvailableCoffees() => Ok(_coffeeManager.GetAvailableCoffees(_database));
 
     [HttpPost("Purchase")]
     public IActionResult Purchase([FromBody] PurchaseRequest request)
@@ -33,7 +36,7 @@ public class CoffeeController : ControllerBase
 
         try
         {
-            var result = _coffeeManager.PurchaseCoffee(request.Order, request.Payment);
+            var result = _coffeeManager.PurchaseCoffee(_database, request.Order, request.Payment);
             if (result == null)
                 return StatusCode(500, "Ocurrio un error al procesar la solicitud.");
 
