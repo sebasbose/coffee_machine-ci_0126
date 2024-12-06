@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coffee_machine_backend", "coffee_machine_backend.csproj", "{F7703255-467B-4BFC-AEDB-74145AA2648B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coffee_machine_backend", "coffee_machine_backend.csproj", "{F7703255-467B-4BFC-AEDB-74145AA2648B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCoffeeMachine", "..\TestCoffeeMachine\TestCoffeeMachine.csproj", "{B13E651F-CDD5-4A66-90E7-D31346D9CB0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F7703255-467B-4BFC-AEDB-74145AA2648B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7703255-467B-4BFC-AEDB-74145AA2648B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7703255-467B-4BFC-AEDB-74145AA2648B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13E651F-CDD5-4A66-90E7-D31346D9CB0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13E651F-CDD5-4A66-90E7-D31346D9CB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13E651F-CDD5-4A66-90E7-D31346D9CB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13E651F-CDD5-4A66-90E7-D31346D9CB0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
